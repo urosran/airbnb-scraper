@@ -1,7 +1,6 @@
 #!/bin/sh
 
 # classic for loop synthax {START..END..INCREMENT}
-
 # loop over prices from 0 to 100 in increments of 2
 for PRICE_MAX in {2..100..2}; do
    
