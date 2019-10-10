@@ -74,7 +74,7 @@ function writeFileJSON(file, extension = ".json") {
     const browser = await puppeteer.launch({
         //some attributes to allow for request interceptions if needed 
         args: ['--enable-features=NetworkService'],
-        headless: false,
+        headless: true,
         ignoreHTTPSErrors: true,
     });
     const page = await browser.newPage();
