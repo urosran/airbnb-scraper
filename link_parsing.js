@@ -1,0 +1,104 @@
+const puppeteer = require('puppeteer');
+var fs = require('fs');
+
+let price_min = 15
+let price_max = 17
+let city = "belgrade"
+let page_number = 0
+let next_btn = '#site-content > div > div > div:nth-child(5) > div > div:nth-child(1) > nav > span > div > ul > li._r4n1gzb > a > div > svg'
+let section_offset = 4
+let items_offset = 0
+let checkin = '2020-01-20'
+let checkout = '2020-01-26'
+// construct intial URL
+let URL = (
+    'https://www.airbnb.com/s/' + city + '/homes?refinement_paths%5B%5D=%2Fhomes' +
+    '&current_tab_id=home_tab' +
+    '&selected_tab_id=home_tab' +
+    '&search_type=filter_change' +
+    '&screen_size=large' +
+    '&hide_dates_and_guests_filters=false' +
+    '&place_id=ChIJCYNtxqt6WkcRaN-jmJkN3N8' +
+    '&price_max=' + price_max +
+    '&price_min=' + price_min +
+    '&section_offset=' + section_offset +
+    '&items_offset=' + items_offset +
+    '&checkin' + '=' + checkin +
+    '&checkout' + "=" + checkout)
+
+//accept items offset and move the page to the next
+function createNextPage(items_offset_l) {
+    return ('https://www.airbnb.com/s/' + city + '/homes?refinement_paths%5B%5D=%2Fhomes' +
+        '&current_tab_id=home_tab' +
+        '&selected_tab_id=home_tab' +
+        '&search_type=filter_change' +
+        '&screen_size=large' +
+        '&hide_dates_and_guests_filters=false' +
+        '&place_id=ChIJCYNtxqt6WkcRaN-jmJkN3N8' +
+        '&price_max=' + price_max +
+        '&price_min=' + price_min +
+        '&section_offset=' + section_offset +
+        '&items_offset=' + items_offset_l +
+        '&checkin' + '=' + checkin +
+        '&checkout' + "=" + checkout)
+}
+
+function writeFileJSON(file, extension = ".json") {
+    let fileName = './results/price_range_min_' + price_min + "_max_" + price_max + "_" + page_number + extension
+    fs.writeFile(fileName, JSON.stringify(file), function (err) {
+        if (err) throw err;
+        console.log('Saved to: ' + fileName);
+    })
+    page_number++;
+}
+
+(async () => {
+    //general setup
+    const browser = await puppeteer.launch({
+        //some attributes to allow for request interceptions if needed 
+        args: ['--enable-features=NetworkService'],
+        headless: false,
+        ignoreHTTPSErrors: true,
+    });
+    const page = await browser.newPage();
+
+    //go to page url and wait until it fully loads
+    await page.goto(URL, {
+        waitUntil: "networkidle0"
+    });
+
+    //get listings from JSON object selector
+    let JSONlistings = await page.evaluate(() => {
+        return JSON.parse(document.querySelector("#data-state").innerText);
+    });
+    //write JSON to the disk
+    writeFileJSON(file = JSONlistings, extension = ".json")
+
+    // console.log(JSONlistings.bootstrapData.reduxData.exploreTab.response.explore_tabs[0].home_tab_metadata.remarketing_ids)
+    console.log(JSONlistings.bootstrapData.reduxData.exploreTab.response.explore_tabs[0].home_tab_metadata.remarketing_ids.length)
+    // check if there is only one page (default 17 listings per page)
+    if (JSONlistings.bootstrapData.reduxData.exploreTab.response.explore_tabs[0].home_tab_metadata.remarketing_ids.length >=17 ){
+        //loop trough the pages 2 to 17 by changing item offset
+        for (i = 1; i <= 4; i++) {
+            //create a new URL by changing offset
+            URL = createNextPage(i * 18)
+            //visit URL
+            await page.goto(URL, {
+                waitUntil: "networkidle0"
+            });
+            //set old json
+            let old_json = JSONlistings
+            //get the listings from the new page
+            JSONlistings = await page.evaluate(() => {
+                return JSON.parse(document.querySelector("#data-state").innerText);
+            });
+            //if you put random offset that airbnb does not have the listings 
+            // check if the number of listing is less than 17 to know if it's the last page
+            if (JSONlistings.bootstrapData.reduxData.exploreTab.response.explore_tabs[0].home_tab_metadata.remarketing_ids.length < 17) {
+                writeFileJSON(JSONlistings)
+                break
+            } 
+        }
+    }
+    await browser.close()
+})();
