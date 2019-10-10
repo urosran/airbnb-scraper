@@ -7,7 +7,6 @@ let price_min = 20
 let price_max = 30
 let city = "belgrade"
 let page_number = 0
-let next_btn = '#site-content > div > div > div:nth-child(5) > div > div:nth-child(1) > nav > span > div > ul > li._r4n1gzb > a > div > svg'
 let section_offset = 4
 let items_offset = 0
 let checkin = '2020-01-20'
