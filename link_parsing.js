@@ -3,8 +3,8 @@ var fs = require('fs');
 // sample usage for console arguments 
 // node link_parsing.js --price_min 20 --price_max 30 --city "belgrade" --checkin "2020-01-20" --checkout "2020-01-26"   
 const args = require('minimist')(process.argv.slice(2));
-let price_min = 15
-let price_max = 17
+let price_min = 20
+let price_max = 30
 let city = "belgrade"
 let page_number = 0
 let next_btn = '#site-content > div > div > div:nth-child(5) > div > div:nth-child(1) > nav > span > div > ul > li._r4n1gzb > a > div > svg'
@@ -19,7 +19,6 @@ if (args.city != undefined) {
     city = args.city
     checkin = args.checkin
     checkout = args.checkout
-    console.log(price_min)
 }
 console.log("Search Criteria: ")
 console.log(
@@ -75,7 +74,7 @@ function writeFileJSON(file, extension = ".json") {
     const browser = await puppeteer.launch({
         //some attributes to allow for request interceptions if needed 
         args: ['--enable-features=NetworkService'],
-        headless: true,
+        headless: false,
         ignoreHTTPSErrors: true,
     });
     const page = await browser.newPage();
@@ -98,7 +97,7 @@ function writeFileJSON(file, extension = ".json") {
     console.log("number of listings on the first page:",
         JSONlistings.bootstrapData.reduxData.exploreTab.response.explore_tabs[0].home_tab_metadata.remarketing_ids.length)
 
-    // check if there is only one page (default 17 listings per page)
+    // check if there is only one page (default 18 listings per page sometimes 17)
     if (JSONlistings.bootstrapData.reduxData.exploreTab.response.explore_tabs[0].home_tab_metadata.remarketing_ids.length >= 17) {
         //loop trough the pages 2 to 17 by changing item offset
         for (i = 1; i <= 4; i++) {
@@ -114,9 +113,12 @@ function writeFileJSON(file, extension = ".json") {
             });
             //if you put random offset that airbnb does not have the listings 
             // check if the number of listing is less than 17 to know if it's the last page
+            console.log(JSONlistings.bootstrapData.reduxData.exploreTab.response.explore_tabs[0].home_tab_metadata.remarketing_ids.length, "json listing pg2")
             if (JSONlistings.bootstrapData.reduxData.exploreTab.response.explore_tabs[0].home_tab_metadata.remarketing_ids.length < 17) {
                 writeFileJSON(JSONlistings)
                 break
+            }else{
+                writeFileJSON(JSONlistings)
             }
         }
     }
