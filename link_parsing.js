@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 var fs = require('fs');
-
+// sample usage for console arguments $ node minimist.js –i jacob –j 45   
+const args = require('minimist')(process.argv.slice(5));
 let price_min = 15
 let price_max = 17
 let city = "belgrade"
@@ -10,6 +11,14 @@ let section_offset = 4
 let items_offset = 0
 let checkin = '2020-01-20'
 let checkout = '2020-01-26'
+
+if (args != undefined){
+    price_min = args.price_min
+    price_max = args.price_max
+    city = args.city
+    checkin = args.checkin
+    checkout = args.checkout
+}
 // construct intial URL
 let URL = (
     'https://www.airbnb.com/s/' + city + '/homes?refinement_paths%5B%5D=%2Fhomes' +
