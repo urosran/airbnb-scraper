@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 var fs = require('fs');
 // sample usage for console arguments 
-// node .\link_parsing.js -price_min 20 -price_max 30 -city "belgrade" -checkin "2020-01-20" -checkout "2020-01-26"   
+// node link_parsing.js -price_min 20 -price_max 30 -city "belgrade" -checkin "2020-01-20" -checkout "2020-01-26"   
 const args = require('minimist')(process.argv.slice(5));
 let price_min = 15
 let price_max = 17
@@ -12,6 +12,7 @@ let section_offset = 4
 let items_offset = 0
 let checkin = '2020-01-20'
 let checkout = '2020-01-26'
+
 if (args == []) {
     price_min = args.price_min
     price_max = args.price_max
@@ -87,11 +88,15 @@ function writeFileJSON(file, extension = ".json") {
     let JSONlistings = await page.evaluate(() => {
         return JSON.parse(document.querySelector("#data-state").innerText);
     });
-    //write JSON to the disk
-    writeFileJSON(file = JSONlistings, extension = ".json")
+    // if the first page is empty 
+    if (JSONlistings.bootstrapData.reduxData.exploreTab.response.explore_tabs[0].home_tab_metadata.remarketing_ids.length != 0) {
+        //write JSON to the disk
+        writeFileJSON(file = JSONlistings, extension = ".json")
+    }
 
-    // console.log(JSONlistings.bootstrapData.reduxData.exploreTab.response.explore_tabs[0].home_tab_metadata.remarketing_ids)
-    console.log(JSONlistings.bootstrapData.reduxData.exploreTab.response.explore_tabs[0].home_tab_metadata.remarketing_ids.length)
+    console.log("number of listings on the first page:",
+        JSONlistings.bootstrapData.reduxData.exploreTab.response.explore_tabs[0].home_tab_metadata.remarketing_ids.length)
+
     // check if there is only one page (default 17 listings per page)
     if (JSONlistings.bootstrapData.reduxData.exploreTab.response.explore_tabs[0].home_tab_metadata.remarketing_ids.length >= 17) {
         //loop trough the pages 2 to 17 by changing item offset
@@ -102,8 +107,6 @@ function writeFileJSON(file, extension = ".json") {
             await page.goto(URL, {
                 waitUntil: "networkidle0"
             });
-            //set old json
-            let old_json = JSONlistings
             //get the listings from the new page
             JSONlistings = await page.evaluate(() => {
                 return JSON.parse(document.querySelector("#data-state").innerText);
