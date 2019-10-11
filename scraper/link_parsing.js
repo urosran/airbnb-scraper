@@ -99,7 +99,7 @@ function writeFileJSON(file, extension = ".json") {
     // check if there is only one page (default 18 listings per page sometimes 17)
     if (JSONlistings.bootstrapData.reduxData.exploreTab.response.explore_tabs[0].home_tab_metadata.remarketing_ids.length >= 17) {
         //loop trough the pages 2 to 17 by changing item offset
-        for (i = 1; i <= 4; i++) {
+        for (i = 1; i <= 17; i++) {
             //create a new URL by changing offset
             URL = createNextPage(i * 18)
             //visit URL
