@@ -60,7 +60,7 @@ function createNextPage(items_offset_l) {
 }
 
 function writeFileJSON(file, extension = ".json") {
-    let fileName = './results/price_range_min_' + price_min + "_max_" + price_max + "_" + page_number + extension
+    let fileName = '../results/price_range_min_' + price_min + "_max_" + price_max + "_" + page_number + extension
     fs.writeFile(fileName, JSON.stringify(file), function (err) {
         if (err) throw err;
         console.log('Saved to: ' + fileName);
