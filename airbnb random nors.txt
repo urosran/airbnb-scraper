@@ -1,0 +1,27 @@
+Price URL extension:
+price_max=35&price_min=29
+https://www.airbnb.com/s/Belgrade--Serbia/homes?refinement_paths%5B%5D=%2Fhomes&current_tab_id=home_tab&selected_tab_id=home_tab&place_id=ChIJvT-116N6WkcR5H4X8lxkuB0&search_type=filter_change&screen_size=medium&hide_dates_and_guests_filters=false&price_max=35&price_min=29
+https://www.airbnb.com/s/Belgrade--Serbia/homes?refinement_paths%5B%5D=%2Fhomes&current_tab_id=home_tab&selected_tab_id=home_tab&place_id=ChIJvT-116N6WkcR5H4X8lxkuB0&search_type=pagination&screen_size=medium&hide_dates_and_guests_filters=false&price_min=29&price_max=35&s_tag=6bt_n9wM&section_offset=4&items_offset=18&last_search_session_id=5796ab1d-e05f-4b38-9d25-ccffcb123f4f
+https://www.airbnb.com/s/Belgrade--Serbia/homes?refinement_paths%5B%5D=%2Fhomes&current_tab_id=home_tab&selected_tab_id=home_tab&place_id=ChIJvT-116N6WkcR5H4X8lxkuB0&search_type=pagination&screen_size=medium&hide_dates_and_guests_filters=false&s_tag=6bt_n9wM&section_offset=4&items_offset=36&price_min=29&price_max=35&last_search_session_id=b2ac8251-4531-4d90-9c44-442a3e11a314
+
+pagination_metadata: {
+has_next_page: true,
+items_offset: 18,
+section_offset: 4,
+search_session_id: "a0e6485f-dd5c-487c-86cd-294d32251a34",
+has_previous_page: false
+},
+
+pagination_metadata: {
+has_next_page: true,
+items_offset: 36,
+section_offset: 4,
+search_session_id: "3358a9c9-9264-455e-8b29-0732ee768f0d",
+has_previous_page: true,
+previous_page_items_offset: 0,
+previous_page_section_offset: 0
+},
+
+
+
+https://www.airbnb.com/api/v2/explore_tabs?_format=for_explore_search_web&adults=0&auto_ib=false&children=0&client_session_id=66f6fa8d-1f63-4da7-ac57-3f7340b1a9eb&currency=USD&current_tab_id=home_tab&experiences_per_grid=20&fetch_filters=true&guidebooks_per_grid=20&has_zero_guest_treatment=true&hide_dates_and_guests_filters=false&infants=0&is_guided_search=true&is_new_cards_experiment=true&is_standard_search=true&items_per_grid=18&key=d306zoyjsyarp7ifhu67rjxn52tv0t20&locale=en&metadata_only=false&place_id=ChIJvT-116N6WkcR5H4X8lxkuB0&query=Belgrade%2C%20Serbia&query_understanding_enabled=true&refinement_paths%5B%5D=%2Fhomes&satori_parameters=ERIA&satori_version=1.1.0&screen_height=978&screen_size=medium&screen_width=767&search_type=autosuggest&selected_tab_id=home_tab&show_groupings=true&supports_for_you_v3=true&timezone_offset=120&version=1.6.2
