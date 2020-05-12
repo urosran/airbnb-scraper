@@ -1,0 +1,24 @@
+// const pptr = require('puppeteer-core');
+const pptr_full = require('puppeteer');
+try{
+
+    (async() = > {
+        const browser = await pptr_full.launch({
+            executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+        });
+
+    const page = await
+    browser.newPage();
+    await
+    page.goto('https://angel.co/companies?locations[]=1620-Boston');
+    console.log(page.url())
+    let items = document.querySelector('#root > div.page.unmodified.dl85.layouts.fhr17.header._a._jm > div.companies.dc59.fix36._a._jm > div > div.content > div.dc59.frs86._a._jm > div.results').innerText
+    console.log(items)
+
+})
+    ();
+}
+catch(err)
+{
+    console.log(err)
+}
